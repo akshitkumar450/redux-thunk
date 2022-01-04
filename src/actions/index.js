@@ -52,42 +52,42 @@ export const fetchPosts = () => {
 
 // using memoization we can reduce the network requests with  same id single time
 
-// export const fetchUser = (id) => {
-//     return (dispatch, getState) => {
-//         _fetchUser(id, dispatch)
-//     }
-// }
-
-// EASY APPROACH FOR SINGLE REQUEST with single user id
-
-// const _fetchUser = _.memoize(async (id, dispatch) => {
-//     const response = await axios.get(`https://jsonplaceholder.typicode.com/users/${id}`)
-//     dispatch({
-//         type: "FETCH_USER",
-//         payload: response.data
-//     })
-// })
-
-
 export const fetchUser = (id) => {
-    return async (dispatch, getState) => {
-        const response = await axios.get(`https://jsonplaceholder.typicode.com/users/${id}`)
-        dispatch({
-            type: "FETCH_USER",
-            payload: response.data
-        })
+    return (dispatch, getState) => {
+        _fetchUser(id, dispatch)
     }
 }
+
+// // EASY APPROACH FOR SINGLE REQUEST with single user id
+
+const _fetchUser = _.memoize(async (id, dispatch) => {
+    const response = await axios.get(`https://jsonplaceholder.typicode.com/users/${id}`)
+    dispatch({
+        type: "FETCH_USER",
+        payload: response.data
+    })
+})
+
+
+// export const fetchUser = (id) => {
+//     return async (dispatch, getState) => {
+//         const response = await axios.get(`https://jsonplaceholder.typicode.com/users/${id}`)
+//         dispatch({
+//             type: "FETCH_USER",
+//             payload: response.data
+//         })
+//     }
+// }
 
 //HARD APPROACH FOR SINGLE REQUEST with single user id
 
 // create  single action creater which call other action creater and dispatch results of calling action creaters
-export const fetchPostsAndUsers = () => {
-    return async (dispatch, getState) => {
-        await dispatch(fetchPosts())
-        const userIds = _.map(getState().posts, 'userId')
-        const uniqueIds = _.uniq(userIds)
-        uniqueIds.forEach(id => dispatch(fetchUser(id)))
-        // console.log(getState().posts);
-    }
-}
+// export const fetchPostsAndUsers = () => {
+//     return async (dispatch, getState) => {
+//         await dispatch(fetchPosts())
+//         const userIds = _.map(getState().posts, 'userId')
+//         const uniqueIds = _.uniq(userIds)
+//         uniqueIds.forEach(id => dispatch(fetchUser(id)))
+//         // console.log(getState().posts);
+//     }
+// }
